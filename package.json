@@ -1,0 +1,67 @@
+{
+	"name": "websockets",
+	"private": true,
+	"version": "0.0.0",
+	"scripts": {
+		"dev": "vite",
+		"server": "node server.js",
+		"format": "npm run pretty && npm run lint",
+		"clean cache": "npm cache verify",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"pretty": "prettier --write \"src/**/*.{ts,tsx}\"",
+		"lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+	},
+	"dependencies": {
+		"@tamagui/animations-css": "^1.79.2",
+		"@tamagui/lucide-icons": "^1.79.2",
+		"@tamagui/shorthands": "^1.79.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"socket.io": "^4.7.2",
+		"socket.io-client": "^4.7.2",
+		"tamagui": "^1.79.2"
+	},
+	"devDependencies": {
+		"@tamagui/vite-plugin": "^1.79.2",
+		"@trivago/prettier-plugin-sort-imports": "^4.3.0",
+		"@types/react": "^18.2.37",
+		"@types/react-dom": "^18.2.15",
+		"@typescript-eslint/eslint-plugin": "^6.10.0",
+		"@typescript-eslint/parser": "^6.10.0",
+		"@vitejs/plugin-react": "^4.2.0",
+		"eslint": "^8.53.0",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-react-refresh": "^0.4.4",
+		"prettier": "^3.1.0",
+		"typescript": "^5.2.2",
+		"vite": "^5.0.4"
+	},
+	"prettier": {
+		"useTabs": true,
+		"tabWidth": 4,
+		"printWidth": 115,
+		"endOfLine": "auto",
+		"bracketSameLine": true,
+		"semi": true,
+		"singleQuote": false,
+		"plugins": [
+			"@trivago/prettier-plugin-sort-imports"
+		],
+		"importOrder": [
+			"^react",
+			"<THIRD_PARTY_MODULES>",
+			"./*.type",
+			"./*.config",
+			"@tamagui/lucide-icons",
+			"^tamagui",
+			"^@tamagui/[^/]*",
+			"./*.styled",
+			"./*.helper",
+			"@uidotdev/usehooks",
+			"./*.use[^/]*",
+			"^[./]"
+		],
+		"importOrderSortSpecifiers": true
+	}
+}
