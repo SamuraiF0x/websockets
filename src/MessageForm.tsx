@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import { Button, Input, Paragraph, Spinner, Stack, XStack, YStack } from "tamagui";
 
 // Stvorena je instanca socket-a
-const socket = io("http://localhost:5173");
+const socket = io("http://localhost:30001");
 
 // React komponenta za unos poruke
 export default function MessageForm() {

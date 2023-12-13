@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const server = http.createServer();
 const io = new Server(server);
 
-const PORT = 5173;
+const PORT = 30001;
 
 // const io = require("socket.io")(server, {
 // 	cors: {
