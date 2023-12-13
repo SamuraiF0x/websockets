@@ -24,6 +24,24 @@ export default function MessageForm() {
 		}
 	};
 
+	// Funkcija za učitavanje programa
+	const loadProgram = () => {
+		socket.emit("message", "load.zadatak.urp");
+		setMessage("");
+	};
+
+	// Funkcija za pokretanje programa
+	const startProgram = () => {
+		socket.emit("message", "play");
+		setMessage("");
+	};
+
+	// Funkcija za zaustavljanje programa
+	const stopProgram = () => {
+		socket.emit("message", "stop");
+		setMessage("");
+	};
+
 	// Primi i isprintaj odgovor sa servera
 	socket.on("confirmation", (confirmationMessage) => {
 		console.log("Odgovor servera:", confirmationMessage);
@@ -52,7 +70,39 @@ export default function MessageForm() {
 						disabled={!isConnected}
 						icon={isConnected ? undefined : <Spinner />}
 						onPress={sendMessage}>
-						{isConnected && "Pošalji"}
+						{isConnected && "Send"}
+					</Button>
+				</XStack>
+				<XStack gap="$4">
+					<Button
+						fontWeight="bold"
+						color="$accent"
+						bw="$1"
+						boc="$accent"
+						disabled={!isConnected}
+						icon={isConnected ? undefined : <Spinner />}
+						onPress={loadProgram}>
+						{isConnected && "Load"}
+					</Button>
+					<Button
+						fontWeight="bold"
+						color="$accent"
+						bw="$1"
+						boc="$accent"
+						disabled={!isConnected}
+						icon={isConnected ? undefined : <Spinner />}
+						onPress={startProgram}>
+						{isConnected && "Start"}
+					</Button>
+					<Button
+						fontWeight="bold"
+						color="$accent"
+						bw="$1"
+						boc="$accent"
+						disabled={!isConnected}
+						icon={isConnected ? undefined : <Spinner />}
+						onPress={stopProgram}>
+						{isConnected && "Stop"}
 					</Button>
 				</XStack>
 			</YStack>
