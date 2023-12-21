@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const http = require("http");
-const { Server } = require("socket.io");
+// const { Server } = require("socket.io");
 
 const server = http.createServer();
-const io = new Server(server);
+// const io = new Server(server);
 
-const PORT = 30001;
+const PORT = 5173;
 
-// const io = require("socket.io")(server, {
-// 	cors: {
-// 		origin: `http://localhost:${PORT}`,
-// 		methods: ["GET", "POST"],
-// 	},
-// });
+const io = require("socket.io")(server, {
+	cors: {
+		origin: `http://localhost:${PORT}`,
+		methods: ["GET", "POST"],
+	},
+});
+
+server.listen(PORT, () => {
+	console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 io.on("connection", (socket) => {
 	console.log("Korisnik se povezao");
@@ -33,11 +37,3 @@ io.on("connection", (socket) => {
 		console.log("Korisnik se odspojio");
 	});
 });
-
-server.listen(PORT, () => {
-	console.log(`Server is running on http://localhost:${PORT}`);
-});
-
-// server.listen(PORT, "10.0.2.15", () => {
-// 	console.log(`Server listening on port ${PORT}`);
-// });

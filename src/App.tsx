@@ -1,6 +1,6 @@
 import config from "../tamagui.config";
 import { TamaguiProvider, Theme } from "tamagui";
-import MessageForm from "./MessageForm";
+import MessageForm from "./components/MessageForm";
 import FullscreenWrapper from "./utilities/FullscreenWrapper";
 
 function App() {
