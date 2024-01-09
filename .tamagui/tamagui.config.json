@@ -1,7 +1,6 @@
 {
   "components": [
     {
-      "moduleName": "tamagui",
       "nameToInfo": {
         "AlertDialogOverlay": {
           "staticConfig": {

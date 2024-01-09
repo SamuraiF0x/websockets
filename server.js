@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
 const http = require("http");
-// const { Server } = require("socket.io");
 
 const server = http.createServer();
-// const io = new Server(server);
 
-const PORT = 5173;
+const PORT = 3000;
 
 const io = require("socket.io")(server, {
 	cors: {
-		origin: `http://localhost:${PORT}`,
+		origin: "*",
 		methods: ["GET", "POST"],
 	},
 });

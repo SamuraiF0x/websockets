@@ -9,17 +9,11 @@ interface ConnectionProps {
 }
 
 export enum Port {
-	LOCAL = "5173",
+	LOCAL = "3000",
 }
 
 // Stvorena je instanca socket-a
 const socket = io(`http://localhost:${Port.LOCAL}`);
-// const socket = io(`http://localhost:${Port.LOCAL}`, {
-//   withCredentials: true,
-//   extraHeaders: {
-//     "Access-Control-Allow-Origin": "http://localhost:3000", // Adjust this to your frontend origin
-//   },
-// });
 
 export default function useConnection({ message, setMessage, serverMsgs, setServerMsgs }: ConnectionProps) {
 	const [isConnected, setIsConnected] = useState(false);
