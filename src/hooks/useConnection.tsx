@@ -31,6 +31,7 @@ export default function useConnection({ message, setMessage, setServerMsgs }: Co
 		}
 	};
 
+	// Primi i isprintaj odgovor sa servera
 	useEffect(() => {
 		const handleConfirmation = (confirmationMessage: string) => {
 			console.log("Odgovor servera:", confirmationMessage);
