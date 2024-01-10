@@ -23,9 +23,9 @@ export default function MessageForm() {
 	const moveRobot = useMovement({ socket });
 
 	const reconnect = () => {
-		socket.connect;
-		console.log("Reconnecting...");
-		setMessage("Reconnecting...");
+		socket.disconnect();
+		console.log("Ponovno povezivanje sa serverom...");
+		socket.connect();
 	};
 
 	return (
