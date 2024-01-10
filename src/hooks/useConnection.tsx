@@ -5,7 +5,7 @@ interface ConnectionProps {
 	message: string;
 	setMessage: (message: string) => void;
 	serverMsgs: string[];
-	setServerMsgs: (serverMsgs: string[]) => void;
+	setServerMsgs: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export enum Port {
@@ -19,7 +19,7 @@ export default function useConnection({ message, setMessage, serverMsgs, setServ
 	const [isConnected, setIsConnected] = useState(false);
 
 	socket.on("connect", () => {
-		console.log("Povezan s serverom");
+		console.log("Povezan sa serverom");
 		setIsConnected(true);
 	});
 

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 
 export enum Direction {
@@ -10,43 +9,46 @@ export enum Direction {
 
 interface MovementProps {
 	socket: Socket;
-	serverMsgs: string[];
 }
 
-export default function useMovement({ socket, serverMsgs }: MovementProps) {
-	const getCurrentPos = `get_actual_tcp_pose()`;
+export default function useMovement({ socket }: MovementProps) {
+	const moveDistance = 0.05;
 
-	useEffect(() => {
-		socket.emit("message", getCurrentPos);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [socket]);
-
-	const [move, setMovement] = useState({
-		x: 0,
-		y: 0,
-	});
+	// const [move, setMovement] = useState<string | undefined>();
 
 	const moveRobot = (direction: Direction | "center" | undefined) => {
 		// Adjust the movement values based on the direction
-		setMovement((prevMovement) => {
-			switch (direction) {
-				case Direction.LEFT:
-					return { ...prevMovement, x: prevMovement.x - 1 };
-				case Direction.RIGHT:
-					return { ...prevMovement, x: prevMovement.x + 1 };
-				case Direction.DOWN:
-					return { ...prevMovement, y: prevMovement.y - 1 };
-				case Direction.UP:
-					return { ...prevMovement, y: prevMovement.y + 1 };
-				default:
-					return prevMovement;
-			}
-		});
+		let move: string | undefined;
+		switch (direction) {
+			case Direction.LEFT:
+				move = `poz_tcp2[0]=poz_tcp2[0]-${moveDistance}\n`;
+				break;
+			case Direction.RIGHT:
+				move = `poz_tcp2[0]=poz_tcp2[0]+${moveDistance}\n`;
+				break;
+			case Direction.DOWN:
+				move = `poz_tcp2[1]=poz_tcp2[1]-${moveDistance}\n`;
+				break;
+			case Direction.UP:
+				move = `poz_tcp2[1]=poz_tcp2[1]+${moveDistance}\n`;
+				break;
+			case "center":
+				move = `poz_tcp2[2]=poz_tcp2[2]+${moveDistance}\n`;
+				break;
+			default:
+				move = undefined;
+		}
 
-		const command = `movel(p[${move.x}, ${move.y}, 0.0, 0.0, 0.0, 0.0], a=0.1, v=0.1)`;
+		const command =
+			move &&
+			`def program_move():\n
+			poz_tcp=get_actual_tcp_pose()\n
+			poz_tcp2=poz_tcp\n
+			${move}
+			movel(poz_tcp2,a=1,v=1,t=0,r=0)\nend\n`;
 
 		// Send the URScript command to the robot via the socket
-		if (direction !== undefined) socket.emit("message", command);
+		if (direction !== undefined && move !== undefined) socket.emit("message", command);
 	};
 
 	return moveRobot;

@@ -21,6 +21,12 @@ export default function MessageForm() {
 
 	const moveRobot = useMovement({ socket });
 
+	const reconnect = () => {
+		socket.connect;
+		console.log("Reconnecting...");
+		setMessage("Reconnecting...");
+	};
+
 	return (
 		<XStack gap="$4">
 			<YStack jc="space-between" gap="$4" p="$6" bg="$background" br="$8">
@@ -28,10 +34,11 @@ export default function MessageForm() {
 					placeholder="Enter command"
 					value={message}
 					onChange={(e) => setMessage(e.nativeEvent.text)}
+					onSubmitEditing={sendMessage}
 					bg="$bgTop"
 				/>
 				<XStack jc="space-between">
-					<Button color="$success" bw="$1" boc="$success" onPress={() => socket.connect}>
+					<Button color="$success" bw="$1" boc="$success" onPress={reconnect}>
 						Reconnect
 					</Button>
 
@@ -80,34 +87,37 @@ export default function MessageForm() {
 				</XStack>
 
 				<Stack mt="$4">
-					<DPad
-						inputValueX={0}
-						inputValueY={0}
-						step={2}
-						delay={50}
-						onDPadPress={(val) => moveRobot(val.DPadPressed)}
-					/>
+					<DPad onDPadPress={(DPadPressed) => moveRobot(DPadPressed)} />
 				</Stack>
 			</YStack>
 
 			<ScrollView mah={475} p="$5" bg="$background" br="$8">
-				<H4 ta="center" p="$3" col="$lavanda" boc="$lavanda" bw="$1" br="$3">
-					Previous commands:
-				</H4>
-				<YStack fd="column-reverse" gap="$4" mt="$4">
+				<Stack
+					style={{ position: "sticky", top: -20 }}
+					zi={1}
+					bg="$background"
+					boc="$lavanda"
+					bw="$1"
+					br="$3">
+					<H4 ta="center" p="$3" col="$lavanda">
+						Previous commands:
+					</H4>
+				</Stack>
+
+				<YStack fd="column-reverse" gap="$4" mt="$4" px="$1">
 					{serverMsgs.map((msg, id) => (
 						<Stack
 							key={id}
 							ai="flex-start"
 							jc="center"
 							p="$4"
-							h="$6"
+							mih="$6"
 							bw="$1"
 							boc="$orange"
 							br="$5"
 							animation="bouncy"
 							enterStyle={{ scale: 0.75 }}>
-							<Paragraph fos="$6">
+							<Paragraph fos="$6" whiteSpace="pre-wrap">
 								{id + 1}. {msg}
 							</Paragraph>
 						</Stack>
