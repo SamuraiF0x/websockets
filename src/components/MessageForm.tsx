@@ -18,7 +18,7 @@ export default function MessageForm() {
 		setServerMsgs,
 	});
 
-	const { loadProgram, startProgram, stopProgram } = useProgram({ socket, setMessage });
+	const { loadProgram, startProgram, stopProgram, movePosition, moveJoint } = useProgram({ socket });
 
 	const moveRobot = useMovement({ socket });
 
@@ -87,9 +87,37 @@ export default function MessageForm() {
 					</Button>
 				</XStack>
 
-				<Stack mt="$4">
-					<DPad onDPadPress={(DPadPressed) => moveRobot(DPadPressed)} />
-				</Stack>
+				<XStack ai="center" jc="space-between" mt="$4">
+					<YStack gap="$5">
+						<Button
+							fontWeight="bold"
+							color="$accent"
+							bw="$1"
+							boc="$accent"
+							disabled={!isConnected}
+							icon={isConnected ? undefined : <Spinner />}
+							onPress={movePosition}>
+							{isConnected && "Move position"}
+						</Button>
+
+						<Button
+							fontWeight="bold"
+							color="$accent"
+							bw="$1"
+							boc="$accent"
+							disabled={!isConnected}
+							icon={isConnected ? undefined : <Spinner />}
+							onPress={moveJoint}>
+							{isConnected && "Move joints"}
+						</Button>
+					</YStack>
+
+					{isConnected ? (
+						<DPad onDPadPress={(DPadPressed) => moveRobot(DPadPressed)} />
+					) : (
+						<Spinner size="large" />
+					)}
+				</XStack>
 			</YStack>
 
 			<ScrollView mah={475} p="$5" pt={0} bg="$background" br="$8">
