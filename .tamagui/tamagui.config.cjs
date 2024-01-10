@@ -41991,7 +41991,7 @@ var config = createTamagui({
       success: tokens.color.green,
       error: tokens.color.red,
       warning: tokens.color.yellow,
-      color: tokens.color.spaceLatte,
+      color: tokens.color.beige,
       colorHover: tokens.color.blue,
       colorPress: tokens.color.purple,
       colorFocus: tokens.color.purple,

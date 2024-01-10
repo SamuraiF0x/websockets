@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 interface ConnectionProps {
@@ -15,7 +15,7 @@ export enum Port {
 // Stvorena je instanca socket-a
 const socket = io(`http://localhost:${Port.LOCAL}`);
 
-export default function useConnection({ message, setMessage, serverMsgs, setServerMsgs }: ConnectionProps) {
+export default function useConnection({ message, setMessage, setServerMsgs }: ConnectionProps) {
 	const [isConnected, setIsConnected] = useState(false);
 
 	socket.on("connect", () => {
@@ -31,11 +31,18 @@ export default function useConnection({ message, setMessage, serverMsgs, setServ
 		}
 	};
 
-	// Primi i isprintaj odgovor sa servera
-	socket.on("confirmation", (confirmationMessage) => {
-		console.log("Odgovor servera:", confirmationMessage);
-		setServerMsgs([...serverMsgs, confirmationMessage]);
-	});
+	useEffect(() => {
+		const handleConfirmation = (confirmationMessage: string) => {
+			console.log("Odgovor servera:", confirmationMessage);
+			setServerMsgs((prevServerMsgs) => [...prevServerMsgs, confirmationMessage]);
+		};
+
+		socket.on("confirmation", handleConfirmation);
+
+		return () => {
+			socket.off("confirmation", handleConfirmation);
+		};
+	}, [setServerMsgs]);
 
 	// U slučaju prekida konekcije sa serverom
 	socket.on("disconnect", () => {
