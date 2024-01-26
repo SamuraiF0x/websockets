@@ -8,12 +8,13 @@ interface ConnectionProps {
 	setServerMsgs: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export enum Port {
-	LOCAL = "3000",
+export enum SERVER {
+	IP = "192.168.223.1",
+	PORT = 29999,
 }
 
 // Stvorena je instanca socket-a
-const socket = io(`http://localhost:${Port.LOCAL}`);
+const socket = io(`http://${SERVER.IP}:${SERVER.PORT}`);
 
 export default function useConnection({ message, setMessage, setServerMsgs }: ConnectionProps) {
 	const [isConnected, setIsConnected] = useState(false);

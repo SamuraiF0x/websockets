@@ -12,7 +12,7 @@ interface MovementProps {
 }
 
 export default function useMovement({ socket }: MovementProps) {
-	const moveDistance = 0.05;
+	const moveDistance = 0.1;
 
 	// const [move, setMovement] = useState<string | undefined>();
 
