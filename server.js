@@ -3,7 +3,6 @@
 const http = require("http");
 const net = require("net");
 const io = require("socket.io");
-// const ioClient = require("socket.io-client");
 
 // Create server
 const server = http.createServer();
@@ -45,22 +44,7 @@ socketServer.on("connection", (socket) => {
 });
 
 const REMOTE_IP = "192.168.223.128";
-const REMOTE_PORT = 30002;
-
-// // Connect to remote server
-// const client = ioClient(`http://${REMOTE_IP}:${REMOTE_PORT}`);
-
-// client.on("connect", () => {
-// 	console.log(`Connected to server at ${REMOTE_IP}:${REMOTE_PORT}`);
-// });
-
-// client.on("message", (message) => {
-// 	console.log("Received message from server:", message);
-// });
-
-// client.on("disconnect", () => {
-// 	console.log("Disconnected from server");
-// });
+const REMOTE_PORT = 30003;
 
 // Connect to remote server
 const client = net.createConnection({ port: REMOTE_PORT, host: REMOTE_IP }, () => {
@@ -68,7 +52,39 @@ const client = net.createConnection({ port: REMOTE_PORT, host: REMOTE_IP }, () =
 });
 
 client.on("data", (data) => {
-	console.log("Received data from remote server:", data.toString());
+	const received = Buffer.from(data);
+
+	const decimalValues = [];
+	for (let i = 0; i < received.length; i++) {
+		decimalValues.push(received.readUInt8(i));
+	}
+
+	const interfaceData = {
+		tool: {
+			position: {
+				x: decimalValues[56],
+				y: decimalValues[57],
+				z: decimalValues[58],
+			},
+			orientation: {
+				rx: decimalValues[59],
+				ry: decimalValues[60],
+				rz: decimalValues[61],
+			},
+			force: {
+				x: decimalValues[68],
+				y: decimalValues[69],
+				z: decimalValues[70],
+			},
+		},
+		jointPositions: decimalValues.slice(32, 38),
+		motorTemperatures: decimalValues.slice(87, 93),
+		controllerTime: decimalValues[93],
+	};
+
+	socketServer.emit("interfaceData", interfaceData);
+
+	console.log("Received data from remote server:", interfaceData);
 });
 
 client.on("end", () => {

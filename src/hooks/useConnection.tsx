@@ -1,11 +1,34 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
+export interface RealtimeDataInterface {
+	tool: {
+		position: {
+			x: number;
+			y: number;
+			z: number;
+		};
+		orientation: {
+			rx: number;
+			ry: number;
+			rz: number;
+		};
+		force: {
+			x: number;
+			y: number;
+			z: number;
+		};
+	};
+	jointPositions: number[];
+	motorTemperatures: number[];
+	controllerTime: number;
+}
+
 interface ConnectionProps {
 	message: string;
 	setMessage: (message: string) => void;
-	serverMsgs: string[];
 	setServerMsgs: React.Dispatch<React.SetStateAction<string[]>>;
+	setRealtimeData: React.Dispatch<React.SetStateAction<RealtimeDataInterface | undefined>>;
 }
 
 export enum SERVER {
@@ -16,7 +39,7 @@ export enum SERVER {
 // Stvorena je instanca socket-a
 const socket = io(`http://${SERVER.IP}:${SERVER.PORT}`);
 
-export default function useConnection({ message, setMessage, setServerMsgs }: ConnectionProps) {
+export default function useConnection({ message, setMessage, setServerMsgs, setRealtimeData }: ConnectionProps) {
 	const [isConnected, setIsConnected] = useState(false);
 
 	socket.on("connect", () => {
@@ -39,12 +62,18 @@ export default function useConnection({ message, setMessage, setServerMsgs }: Co
 			setServerMsgs((prevServerMsgs) => [...prevServerMsgs, confirmationMessage]);
 		};
 
+		const handleRealtimeData = (data: RealtimeDataInterface) => {
+			setRealtimeData(data);
+		};
+
 		socket.on("confirmation", handleConfirmation);
+
+		socket.on("interfaceData", handleRealtimeData);
 
 		return () => {
 			socket.off("confirmation", handleConfirmation);
 		};
-	}, [setServerMsgs]);
+	}, [setRealtimeData, setServerMsgs]);
 
 	// U slučaju prekida konekcije sa serverom
 	socket.on("disconnect", () => {
